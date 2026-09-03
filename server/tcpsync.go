@@ -5,6 +5,23 @@ import (
 	"log"
 )
 
+const banner = "\033[38;5;213m" + `
+██╗      ██████╗ ██╗  ██╗███████╗██╗   ██╗
+██║     ██╔═══██╗██║ ██╔╝██╔════╝╚██╗ ██╔╝
+██║     ██║   ██║█████╔╝ █████╗   ╚████╔╝ 
+██║     ██║   ██║██╔═██╗ ██╔══╝    ╚██╔╝  
+███████╗╚██████╔╝██║  ██╗███████╗   ██║   
+╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝   ╚═╝   
+` + "\033[0m"
+
+func sendWelcomeMessage(conn net.Conn) error{
+	_, err := conn.Write([]byte(banner))
+	if err != nil {
+		return err
+	}
+	return nil;
+}
+
 func readCommand(conn net.Conn) (string, error) {
 	var buffer []byte = make([]byte, 1024)
 	n, err := conn.Read(buffer)
@@ -24,7 +41,7 @@ func respondToClient(conn net.Conn, cmd string) error {
 func StartTcpServer() {
 	log.Println("starting the tcp server")
 	var connected_clients int = 0
-	listner, err := net.Listen("tcp", ":4444")
+	listner, err := net.Listen("tcp", ":1111")
 	if err != nil {
 		panic(err)
 	}
@@ -34,6 +51,9 @@ func StartTcpServer() {
 			panic(err)
 		}
 		connected_clients++
+		if err := sendWelcomeMessage(connection); err != nil {
+			log.Println("got error in sending welcome banner",err)
+		}
 		log.Println("New client connected. Total clients: ", connected_clients)
 		log.Println("connection recived from remote address", connection.RemoteAddr())
 		for {
