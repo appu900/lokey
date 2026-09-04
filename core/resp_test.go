@@ -6,11 +6,11 @@ import (
 
 func TestErrorMessageDecode(t *testing.T) {
 	cases := map[string]string{
-		"-error-message\r\n":"error-message",
+		"-error-message\r\n": "error-message",
 	}
-	for key, value := range cases{
-		testIncomingMessage , _ := Decode([]byte(key))
-		if testIncomingMessage != value{
+	for key, value := range cases {
+		testIncomingMessage, _ := Decode([]byte(key))
+		if testIncomingMessage != value {
 			t.Fail()
 		}
 	}
@@ -23,6 +23,18 @@ func TestSimpleStringDecode(t *testing.T) {
 		testIncomingValue, _ := Decode([]byte(key))
 		if testIncomingValue != value {
 			t.Fail()
+		}
+	}
+}
+func TestInt64Decode(t *testing.T) {
+	cases := map[string]int64{
+		":1234\r\n": 1234,
+		":0\r\n":    0,
+	}
+	for key, value := range cases {
+		testIncomingValue, _ := Decode([]byte(key))
+		if testIncomingValue != value {
+			t.Errorf("Decode(%q) = %v, want %d", key, testIncomingValue, value)
 		}
 	}
 }

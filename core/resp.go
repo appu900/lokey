@@ -21,7 +21,6 @@ func readError(data []byte) (string, int, error) {
 // ** function for read the simple string data
 // ** start with a pointer and travere untill we get '\r' and incrememt the position
 // ** the build this byte array and return this string.
-
 func readSimpleString(data []byte) (string, int, error) {
 	pos := 1
 	for ; data[pos] != '\r'; pos++ {
@@ -43,7 +42,7 @@ func DecodeOne(data []byte) (interface{}, int, error) {
 	case '-':
 		return readError(data)
 	case ':':
-		return readSimpleString(data)
+		return readInt64(data)
 	case '$':
 		return readSimpleString(data)
 	case '*':
