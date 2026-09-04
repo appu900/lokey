@@ -1,8 +1,8 @@
 package server
 
 import (
-	"net"
 	"log"
+	"net"
 )
 
 const banner = "\033[38;5;213m" + `
@@ -14,12 +14,12 @@ const banner = "\033[38;5;213m" + `
 ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝   ╚═╝   
 ` + "\033[0m"
 
-func sendWelcomeMessage(conn net.Conn) error{
+func sendWelcomeMessage(conn net.Conn) error {
 	_, err := conn.Write([]byte(banner))
 	if err != nil {
 		return err
 	}
-	return nil;
+	return nil
 }
 
 func readCommand(conn net.Conn) (string, error) {
@@ -52,7 +52,7 @@ func StartTcpServer() {
 		}
 		connected_clients++
 		if err := sendWelcomeMessage(connection); err != nil {
-			log.Println("got error in sending welcome banner",err)
+			log.Println("got error in sending welcome banner", err)
 		}
 		log.Println("New client connected. Total clients: ", connected_clients)
 		log.Println("connection recived from remote address", connection.RemoteAddr())
